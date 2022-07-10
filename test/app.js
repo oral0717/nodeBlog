@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-08 20:51:32
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-10 15:35:27
+ * @LastEditTime: 2022-07-10 15:46:35
  */
 const http = require('http');
 const path = require('path')
@@ -35,7 +35,8 @@ const server = http.createServer((req, res) => {
       postData += chunk.toString()
     })
     req.on('end', () => {
-      res.end('hello world !')
+      resData.postData = postData
+      res.end(JSON.stringify(resData))
     })
   }
 })
