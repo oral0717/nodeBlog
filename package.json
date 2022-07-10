@@ -2,12 +2,14 @@
   "name": "nodeblog",
   "version": "1.0.0",
   "description": "nodeblog,node web server",
-  "main": "test/app.js",
+  "main": "bin/www.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js",
+    "prod": "cross-env NODE_ENV=production nodemon ./bin/www.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +23,8 @@
   "homepage": "https://github.com/oral0717/nodeBlog#readme",
   "dependencies": {
     "querystringify": "^2.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
