@@ -4,8 +4,9 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 10:52:41
+ * @LastEditTime: 2022-07-11 12:19:57
  */
+const qs = require('querystringify')
 const handleUserRouter = require('./src/router/user')
 const handleBlogRouter = require('./src/router/blog')
 
@@ -13,6 +14,8 @@ const serverHandle = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
   const url = req.url
   req.path = url.split('?')[0]
+  req.query = qs.parse(url.split('?')[1])
+
   // 博客接口路由
   const blogData = handleBlogRouter(req, res)
   if (blogData) {

@@ -4,20 +4,23 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:03
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 10:54:43
+ * @LastEditTime: 2022-07-11 12:28:42
  */
+const { getList, getDetail } = require('../controller/blog')
+const {SuccessModel, ErrorModel} = require('../model/resModel')
 const handleBlogRouter = (req, res) => {
-  const {method, path} = req
+  const {method, path, query} = req
 
   if (method === 'GET' && path === '/api/blog/list') {
-    return {
-      msg: '博客列表接口'
-    }
+    const { author = '', keywords = '' } = query
+    console.log(query)
+    const listData = getList(author,keywords)
+    return new SuccessModel(listData)
   }
   if (method === 'GET' && path === '/api/blog/detail') {
-    return {
-      msg: '博客详情'
-    }
+    const { id } = query
+    const data= getDetail(id)
+    return new SuccessModel(data)
   }
   if (method === 'POST' && path === '/api/blog/new') {
     return {
