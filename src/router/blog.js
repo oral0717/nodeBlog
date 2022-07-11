@@ -4,12 +4,10 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:03
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 10:10:25
+ * @LastEditTime: 2022-07-11 10:54:43
  */
 const handleBlogRouter = (req, res) => {
-  const method = req.method
-  const url = req.url
-  const path = url.split('?')[0]
+  const {method, path} = req
 
   if (method === 'GET' && path === '/api/blog/list') {
     return {
