@@ -4,11 +4,39 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 12:19:57
+ * @LastEditTime: 2022-07-11 14:00:35
  */
 const qs = require('querystringify')
 const handleUserRouter = require('./src/router/user')
 const handleBlogRouter = require('./src/router/blog')
+
+// 用于处理post data
+const getPostData = (req) => {
+  const promise = new Promise((resolve, reject) => {
+    if (req.method !== 'POST') {
+      resolve({})
+      return
+    }
+    if (req.headers["content-type"] !== 'application/json') {
+      resolve({})
+      return
+    }
+    let postData = ''
+    req.on('data', chunk => {
+      postData += chunk.toString()
+    })
+    req.on('end', () => {
+      if (!postData) {
+        resolve({})
+        return
+      }
+      resolve(
+        JSON.parse(postData)
+      )
+    })
+  })
+  return promise
+}
 
 const serverHandle = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
@@ -16,23 +44,28 @@ const serverHandle = (req, res) => {
   req.path = url.split('?')[0]
   req.query = qs.parse(url.split('?')[1])
 
-  // 博客接口路由
-  const blogData = handleBlogRouter(req, res)
-  if (blogData) {
-    res.end(JSON.stringify(blogData))
-    return
-  }
+  // 处理post data
+  getPostData(req).then(postData => {
+    req.body = postData
 
-  // 用户接口路由
-  const userData = handleUserRouter(req, res)
-  if (userData) {
-    res.end(JSON.stringify(userData))
-    return
-  }
+    // 博客接口路由
+    const blogData = handleBlogRouter(req, res)
+    if (blogData) {
+      res.end(JSON.stringify(blogData))
+      return
+    }
 
-  // 未命中路由，404
-  res.writeHead(404, { "Content-Type": "text/plain" })
-  res.write("404 Not Found\n")
-  res.end()
+    // 用户接口路由
+    const userData = handleUserRouter(req, res)
+    if (userData) {
+      res.end(JSON.stringify(userData))
+      return
+    }
+
+    // 未命中路由，404
+    res.writeHead(404, { "Content-Type": "text/plain" })
+    res.write("404 Not Found\n")
+    res.end()
+  })
 }
 module.exports = serverHandle

@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-11 12:08:12
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 12:26:49
+ * @LastEditTime: 2022-07-11 14:55:40
  */
 const getList = (author, keywords) => {
   return [{
@@ -31,7 +31,24 @@ const getDetail = (id) => {
   }
 }
 
+const newBlog = (blogData = {}) => {
+  return {
+    id: 3
+  }
+}
+
+const updateBlog = (id, blogData = {}) => {
+  return true
+}
+
+const deleteBlog = (id) => {
+  return true
+}
+
 module.exports = {
   getList,
-  getDetail
+  getDetail,
+  newBlog,
+  updateBlog,
+  deleteBlog
 }
