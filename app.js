@@ -4,38 +4,30 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-10 19:06:57
+ * @LastEditTime: 2022-07-11 10:41:28
  */
-const qs = require('querystringify')
+const handleUserRouter = require('./src/router/user')
+const handleBlogRouter = require('./src/router/blog')
+
 const serverHandle = (req, res) => {
-  const { url, method } = req
-  const path = url.split('?')[0]
-  const query = qs.parse(url.split('?')[1])
-
   res.setHeader('Content-Type', 'application/json')
+  // 博客接口路由
+  const blogData = handleBlogRouter(req, res)
+  if (blogData) {
+    res.end(JSON.stringify(blogData))
+    return
+  }
 
-  // 返回的数据
-  const resData = {
-    method,
-    url,
-    path,
-    query,
-    env: process.env.NODE_ENV
+  // 用户接口路由
+  const userData = handleUserRouter(req, res)
+  if (userData) {
+    res.end(JSON.stringify(userData))
+    return
   }
-  if (method === 'GET') {
-    res.end(
-      JSON.stringify(resData)
-    )
-  }
-  if (method === 'POST') {
-    let postData = ''
-    req.on('data', chunk => {
-      postData += chunk.toString()
-    })
-    req.on('end', () => {
-      resData.postData = postData
-      res.end(JSON.stringify(resData))
-    })
-  }
+
+  // 未命中路由，404
+  res.writeHead(404, { "Content-Type": "text/plain" })
+  res.write("404 Not Found\n")
+  res.end()
 }
 module.exports = serverHandle
