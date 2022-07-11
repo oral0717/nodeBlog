@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/oral0717/nodeBlog#readme",
   "dependencies": {
+    "mysql": "^2.18.1",
     "querystringify": "^2.2.0"
   },
   "devDependencies": {
