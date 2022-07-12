@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:03
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-12 11:33:57
+ * @LastEditTime: 2022-07-12 12:45:45
  */
 const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blog')
 const {SuccessModel, ErrorModel} = require('../model/resModel')
@@ -32,24 +32,28 @@ const handleBlogRouter = (req, res) => {
     return result.then((data) => {
       return new SuccessModel(data)
     })
-    // const data = newBlog(body)
-    // return new SuccessModel(data)
   }
   if (method === 'POST' && path === '/api/blog/update') {
     const result = updateBlog(id, body)
-    if (result) {
-      return new SuccessModel()
-    } else {
-      return new ErrorModel('更新博客失败')
-    }
+    return result.then(val => {
+      if (val) {
+        return new SuccessModel()
+      } else {
+        return new ErrorModel('更新博客失败')
+      }
+    })
+
   }
   if (method === 'POST' && path === '/api/blog/delete') {
-    const result = deleteBlog(id)
-    if (result) {
-      return new SuccessModel()
-    } else {
-      return new ErrorModel('删除博客失败')
-    }
+    const author = '张三'
+    const result = deleteBlog(id, author)
+    return result.then((val) => {
+      if (val) {
+        return new SuccessModel()
+      } else {
+        return new ErrorModel('删除博客失败')
+      }
+    })
   }
 }
 
