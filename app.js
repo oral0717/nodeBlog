@@ -57,10 +57,6 @@ const serverHandle = (req, res) => {
       })
       return
     }
-    // if (blogData) {
-    //   res.end(JSON.stringify(blogData))
-    //   return
-    // }
 
     // 用户接口路由
     const userData = handleUserRouter(req, res)

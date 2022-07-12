@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:03
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-12 10:47:27
+ * @LastEditTime: 2022-07-12 11:33:57
  */
 const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blog')
 const {SuccessModel, ErrorModel} = require('../model/resModel')
@@ -20,12 +20,20 @@ const handleBlogRouter = (req, res) => {
     })
   }
   if (method === 'GET' && path === '/api/blog/detail') {
-    const data= getDetail(id)
-    return new SuccessModel(data)
+    const result = getDetail(id)
+    return result.then((detailData) => {
+      return new SuccessModel(detailData)
+    })
   }
   if (method === 'POST' && path === '/api/blog/new') {
-    const data = newBlog(body)
-    return new SuccessModel(data)
+    const author = '张三'
+    req.body.author = author
+    const result = newBlog(req.body)
+    return result.then((data) => {
+      return new SuccessModel(data)
+    })
+    // const data = newBlog(body)
+    // return new SuccessModel(data)
   }
   if (method === 'POST' && path === '/api/blog/update') {
     const result = updateBlog(id, body)
