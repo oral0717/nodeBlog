@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-11 12:08:12
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 17:14:46
+ * @LastEditTime: 2022-07-12 09:53:57
  */
 const {exec} = require('../db/mysql')
 const getList = (author, keyword) => {
@@ -16,7 +16,7 @@ const getList = (author, keyword) => {
     sql += `and title like '%${keyword}%'`
   }
   sql += `order by createtime desc`
-  return exec(sql)
+  return exec(sql) // 返回promise
   // return [{
   //   id: 1,
   //   title: '博客A',

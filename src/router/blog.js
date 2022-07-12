@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:03
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 14:37:12
+ * @LastEditTime: 2022-07-12 10:47:27
  */
 const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blog')
 const {SuccessModel, ErrorModel} = require('../model/resModel')
@@ -13,10 +13,11 @@ const handleBlogRouter = (req, res) => {
   const {id} = query
 
   if (method === 'GET' && path === '/api/blog/list') {
-    const { author = '', keywords = '' } = query
-    console.log(query)
-    const listData = getList(author,keywords)
-    return new SuccessModel(listData)
+    const { author = '', keyword = '' } = query
+    const result = getList(author, keyword)
+    return result.then((listData) => { // 返回一个promise
+      return new SuccessModel(listData)
+    })
   }
   if (method === 'GET' && path === '/api/blog/detail') {
     const data= getDetail(id)

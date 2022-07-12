@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-11 14:00:35
+ * @LastEditTime: 2022-07-12 10:21:17
  */
 const qs = require('querystringify')
 const handleUserRouter = require('./src/router/user')
@@ -49,11 +49,18 @@ const serverHandle = (req, res) => {
     req.body = postData
 
     // 博客接口路由
-    const blogData = handleBlogRouter(req, res)
-    if (blogData) {
-      res.end(JSON.stringify(blogData))
+    const blogResult = handleBlogRouter(req, res)
+    if (blogResult) {
+      blogResult.then(blogData => {
+        res.end(JSON.stringify(blogData))
+        return
+      })
       return
     }
+    // if (blogData) {
+    //   res.end(JSON.stringify(blogData))
+    //   return
+    // }
 
     // 用户接口路由
     const userData = handleUserRouter(req, res)
