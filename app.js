@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-12 10:21:17
+ * @LastEditTime: 2022-07-12 13:18:02
  */
 const qs = require('querystringify')
 const handleUserRouter = require('./src/router/user')
@@ -61,7 +61,10 @@ const serverHandle = (req, res) => {
     // 用户接口路由
     const userData = handleUserRouter(req, res)
     if (userData) {
-      res.end(JSON.stringify(userData))
+      userData.then(userData => {
+        res.end(JSON.stringify(userData))
+        return
+      })
       return
     }
 
