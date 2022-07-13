@@ -23,7 +23,8 @@
   "homepage": "https://github.com/oral0717/nodeBlog#readme",
   "dependencies": {
     "mysql": "^2.18.1",
-    "querystringify": "^2.2.0"
+    "querystringify": "^2.2.0",
+    "redis": "2.8.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"

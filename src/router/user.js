@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 19:14:10
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-13 12:36:33
+ * @LastEditTime: 2022-07-13 16:37:53
  */
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { login } = require('../controller/user')
@@ -31,13 +31,13 @@ const handleUserRouter = (req, res) => {
     })
   }
   // 登录验证的测试
-  // if (method === 'GET' && req.path === '/api/user/login-test') {
-  //   console.log('cookie:', cookie)
-  //   if (cookie.username) {
-  //     return Promise.resolve(new SuccessModel('测试登录成功'))
-  //   }
-  //   return Promise.resolve(new ErrorModel('测试登录失败'))
-  // }
+  if (method === 'GET' && req.path === '/api/user/login-test') {
+    console.log('cookie:', cookie)
+    if (cookie.username) {
+      return Promise.resolve(new SuccessModel('测试登录成功'))
+    }
+    return Promise.resolve(new ErrorModel('测试登录失败'))
+  }
 }
 
 module.exports = handleUserRouter
