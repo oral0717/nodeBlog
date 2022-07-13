@@ -4,11 +4,19 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-13 11:24:43
+ * @LastEditTime: 2022-07-13 17:27:50
  */
 const qs = require('querystringify')
+const {get, set} = require('./src/db/redis')
 const handleUserRouter = require('./src/router/user')
 const handleBlogRouter = require('./src/router/blog')
+
+const getCookieExpires = () => {
+  const d = new Date()
+  d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
+  // console.log('d.toGMTString() is', d.toGMTString())
+  return d.toGMTString()
+}
 
 // 用于处理post data
 const getPostData = (req) => {
@@ -57,14 +65,38 @@ const serverHandle = (req, res) => {
     req.cookie[key] = value
   })
 
-  // 处理post data
-  getPostData(req).then(postData => {
+  // 解析 session(使用redis)
+  let needSetCookie = false
+  let userId = req.cookie.userid
+  if (!userId) {
+    needSetCookie = true
+    userId = `${Date.now()}_${Math.random()}`
+    // 初始化session
+    set(userId, {})
+  }
+  // 获取session
+  req.sessionId = userId
+  get(req.sessionId).then((sessionData) => {
+    if (sessionData == null) {
+      // 初始化redis中的session值
+      set(req.sessionId, {})
+      // 设置session
+      req.session = sessionData
+    }
+    console.log('req.session', req.session)
+    // 处理post data
+    return getPostData(req)
+  })
+  .then(postData => {
     req.body = postData
 
     // 博客接口路由
     const blogResult = handleBlogRouter(req, res)
     if (blogResult) {
       blogResult.then(blogData => {
+        if (needSetCookie) {
+          res.setHeader('Set-Cookie', `userid=${userId};path=/;httpOnly;expires=${expires}`)
+        }
         res.end(JSON.stringify(blogData))
         return
       })
