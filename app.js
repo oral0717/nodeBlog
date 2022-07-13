@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-12 13:18:02
+ * @LastEditTime: 2022-07-13 11:24:43
  */
 const qs = require('querystringify')
 const handleUserRouter = require('./src/router/user')
@@ -42,7 +42,20 @@ const serverHandle = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
   const url = req.url
   req.path = url.split('?')[0]
+
+  // 解析query
   req.query = qs.parse(url.split('?')[1])
+
+  // 解析cookie
+  req.cookie = {}
+  const cookieStr = req.headers.cookie || '' // k1=v1;k2=v2;k3=v3
+  cookieStr.split(';').forEach(item => {
+    if (!item) return
+    const itemArr = item.split('=')
+    const key = itemArr[0].trim()
+    const value = itemArr[1].trim()
+    req.cookie[key] = value
+  })
 
   // 处理post data
   getPostData(req).then(postData => {

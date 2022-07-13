@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-08 10:37:29
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-08 20:15:43
+ * @LastEditTime: 2022-07-12 15:47:41
 -->
 ## 调试方法 inspect
 --inspect=1874  项目启动命令里需要这个
@@ -53,7 +53,20 @@ delete from users where username<>'lisi'; 不等于<>
 
 select version()查看mysql版本
 
+## 登录
+cookie和session
+session写入redis
+mysql是硬盘数据库，redis是内存数据库
+cookie:存储在浏览器上的一段字符串，格式：k1=v1;k2=v2;k3=v3
 
+每次发送http请求，会将请求域的cookie一起发送给server
+server可以修改cookie并返回给浏览器
+浏览器中也可以通过js修改cookie(有限制)
+
+server端nodejs操作cookie
+查看cookie
+修改cookie
+实现登录验证
 
 
 
