@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-10 17:34:54
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-13 17:27:50
+ * @LastEditTime: 2022-07-14 12:53:27
  */
 const qs = require('querystringify')
 const {get, set} = require('./src/db/redis')
@@ -61,7 +61,7 @@ const serverHandle = (req, res) => {
     if (!item) return
     const itemArr = item.split('=')
     const key = itemArr[0].trim()
-    const value = itemArr[1].trim()
+    const value = itemArr[1].trim ()
     req.cookie[key] = value
   })
 
@@ -74,16 +74,20 @@ const serverHandle = (req, res) => {
     // 初始化session
     set(userId, {})
   }
+
+
   // 获取session
   req.sessionId = userId
   get(req.sessionId).then((sessionData) => {
     if (sessionData == null) {
       // 初始化redis中的session值
       set(req.sessionId, {})
+      req.session = {}
+    } else {
       // 设置session
       req.session = sessionData
     }
-    console.log('req.session', req.session)
+
     // 处理post data
     return getPostData(req)
   })
@@ -94,8 +98,9 @@ const serverHandle = (req, res) => {
     const blogResult = handleBlogRouter(req, res)
     if (blogResult) {
       blogResult.then(blogData => {
+         // 设置cookie
         if (needSetCookie) {
-          res.setHeader('Set-Cookie', `userid=${userId};path=/;httpOnly;expires=${expires}`)
+          res.setHeader('Set-Cookie', `userid=${userId};path=/;httpOnly;expires=${getCookieExpires()}`)
         }
         res.end(JSON.stringify(blogData))
         return
@@ -107,6 +112,10 @@ const serverHandle = (req, res) => {
     const userData = handleUserRouter(req, res)
     if (userData) {
       userData.then(userData => {
+         // 设置cookie
+        if (needSetCookie) {
+          res.setHeader('Set-Cookie', `userid=${userId};path=/;httpOnly;expires=${getCookieExpires()}`)
+        }
         res.end(JSON.stringify(userData))
         return
       })

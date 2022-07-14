@@ -4,7 +4,7 @@
  * @Author: Oral
  * @Date: 2022-07-13 16:46:27
  * @LastEditors: Oral
- * @LastEditTime: 2022-07-13 16:57:14
+ * @LastEditTime: 2022-07-14 11:04:54
  */
 const redis = require('redis')
 const { REDIS_CONF } = require('../conf/db.js')
@@ -24,6 +24,7 @@ function set(key, val) {
 function get(key) {
   const promise = new Promise((resolve, reject) => {
     redisClient.get(key, (err, val) => {
+
       if (err) {
         reject(err)
         return
